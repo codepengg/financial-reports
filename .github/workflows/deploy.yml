@@ -1,0 +1,50 @@
+name: Deploy to FTP
+
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+
+      - name: Install Composer Dependencies
+        run: composer install --no-dev
+
+
+      - name: Deploy to FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_PATH }}
+          local-dir: .
+
+      - name: Directory Permission
+        run: |
+          sudo chown -R www-data:www-data .
+          sudo chmod -R 755 .
+          sudo chmod -R 777 storage boostrap/cache
+
+      - name: Clear Cached Files
+        run: |
+          php artisan optimize:clear
+          php artisan storage:link
+
+

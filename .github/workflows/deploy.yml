@@ -32,8 +32,13 @@ jobs:
               composer install
             fi
 
+            #cp .env
+            cp /home/pengg/financial-report.pengg.web.id/resources/.txt /home/pengg/financial-report.pengg.web.id/.env
+            cp /home/pengg/financial-report.pengg.web.id/resources/assets/*.png /home/pengg/financial-report.pengg.web.id/storage/app/public/
+
             # Run Laravel migrations
-            php artisan migrate
+            php artisan migrate --force
+            php artisan storage:link
 
             # Set proper permissions
             chown -R www-data:www-data /home/pengg/financial-report.pengg.web.id

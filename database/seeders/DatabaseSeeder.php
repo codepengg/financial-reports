@@ -50,16 +50,16 @@ class DatabaseSeeder extends Seeder
          $role->syncPermissions($permissions_list);
 
          Category::insert([
-             ['name' => 'Basic Income', 'is_expenses' => false, 'image' => 'wallet.png'],
-             ['name' => 'Passive Income', 'is_expenses' => false, 'image' => 'folder.png'],
-             ['name' => 'Side Hustle', 'is_expenses' => false, 'image' => 'html.png'],
-             ['name' => 'Food & Drinks', 'is_expenses' => true, 'image' => 'meat.png'],
-             ['name' => 'Transportation', 'is_expenses' => true, 'image' => 'car.png'],
-             ['name' => 'Home & Property', 'is_expenses' => true, 'image' => 'building.png'],
-             ['name' => 'Investment', 'is_expenses' => true, 'image' => 'coin-stack.png'],
-             ['name' => 'Shopping', 'is_expenses' => true, 'image' => 'shopping-cart.png'],
-             ['name' => 'Entertaiment', 'is_expenses' => true, 'image' => 'tv-set.png'],
-             ['name' => 'Loan', 'is_expenses' => true, 'image' => 'banknote.png'],
+             ['name' => 'Basic Income', 'is_expenses' => false, 'image' => 'wallet.png', 'is_default' => true, 'created_by' => $user->id],
+             ['name' => 'Passive Income', 'is_expenses' => false, 'image' => 'folder.png', 'is_default' => true, 'created_by' => $user->id],
+             ['name' => 'Side Hustle', 'is_expenses' => false, 'image' => 'html.png', 'is_default' => true, 'created_by' => $user->id],
+             ['name' => 'Food & Drinks', 'is_expenses' => true, 'image' => 'meat.png', 'is_default' => true, 'created_by' => $user->id],
+             ['name' => 'Transportation', 'is_expenses' => true, 'image' => 'car.png', 'is_default' => true, 'created_by' => $user->id],
+             ['name' => 'Home & Property', 'is_expenses' => true, 'image' => 'building.png', 'is_default' => true, 'created_by' => $user->id],
+             ['name' => 'Investment', 'is_expenses' => true, 'image' => 'coin-stack.png', 'is_default' => true, 'created_by' => $user->id],
+             ['name' => 'Shopping', 'is_expenses' => true, 'image' => 'shopping-cart.png', 'is_default' => true, 'created_by' => $user->id],
+             ['name' => 'Entertaiment', 'is_expenses' => true, 'image' => 'tv-set.png', 'is_default' => true, 'created_by' => $user->id],
+             ['name' => 'Loan', 'is_expenses' => true, 'image' => 'banknote.png', 'is_default' => true, 'created_by' => $user->id],
          ]);
 
     }

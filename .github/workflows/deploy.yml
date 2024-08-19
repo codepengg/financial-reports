@@ -18,22 +18,24 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copy files to VPS
+      - name: Deploy to VPS
         run: |
           rsync -avz --delete \
           -e 'ssh -o StrictHostKeyChecking=no' \
           ./ root@${{ secrets.FTP_SERVER }}:/home/pengg/financial-report.pengg.web.id/
 
-      - name: Install Composer dependencies
-        run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.FTP_SERVER }} '
-          cd /home/pengg/financial-report.pengg.web.id &&
-          if [ ! -d "vendor" ]; then
-            composer install;
-          fi'
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.FTP_SERVER }} << 'EOF'
+            cd /home/pengg/financial-report.pengg.web.id
 
-      - name: Set Permissions
-        run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.FTP_SERVER }} '
-          chown -R www-data:www-data /home/pengg/financial-report.pengg.web.id &&
-          chmod -R 775 /home/pengg/financial-report.pengg.web.id'
+            # Install Composer dependencies if vendor directory does not exist
+            if [ ! -d "vendor" ]; then
+              composer install
+            fi
+
+            # Run Laravel migrations
+            php artisan migrate
+
+            # Set proper permissions
+            chown -R www-data:www-data /home/pengg/financial-report.pengg.web.id
+            chmod -R 775 /home/pengg/financial-report.pengg.web.id
+          EOF

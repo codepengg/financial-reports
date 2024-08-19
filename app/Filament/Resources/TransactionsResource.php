@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class TransactionsResource extends Resource
 {
@@ -25,14 +26,15 @@ class TransactionsResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name')
+                    ->relationship('category', 'name', modifyQueryUsing: fn(Builder $query) => self::getDropdownData($query))
                     ->required(),
                 Forms\Components\TextInput::make('name')
+                    ->label('Name Transaction')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('date_transaction')
                     ->label('Date Transaction')
-                    ->default(now())
+                    ->default(now()->timezone('Asia/Jakarta'))
                     ->format('d-m-y')
                     ->required(),
                 Forms\Components\TextInput::make('amount')
@@ -52,6 +54,7 @@ class TransactionsResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => Transactions::listTransactions($query))
             ->columns([
                 Tables\Columns\ImageColumn::make('category.image')
                     ->label('#'),
@@ -74,6 +77,9 @@ class TransactionsResource extends Resource
                     ->getStateUsing(fn(Transactions $model): string => numberToIdr($model->amount))
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('user')
+                    ->visible(fn($record) => auth()->user()->hasRole('admin'))
+                    ->getStateUsing(fn(Transactions $model): string => ucfirst($model->user->name) ?? '-'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('D, d M Y')
                     ->sortable()
@@ -114,5 +120,17 @@ class TransactionsResource extends Resource
             'create' => Pages\CreateTransactions::route('/create'),
             'edit' => Pages\EditTransactions::route('/{record}/edit'),
         ];
+    }
+
+    private static function getDropdownData(Builder $query): Builder
+    {
+        $user = auth()->user();
+        if (!$user->hasRole('admin')) {
+            return $query->whereHas('users', function (Builder $query) use ($user) {
+                $query->where('user_id', $user->id);
+            });
+        }
+
+        return $query;
     }
 }

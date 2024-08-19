@@ -8,6 +8,7 @@ use App\Models\Transactions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,10 +34,16 @@ class TransactionsResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('date')
+                Forms\Components\DatePicker::make('date_transaction')
+                    ->label('Date Transaction')
+                    ->default(now())
+                    ->format('d-m-y')
                     ->required(),
                 Forms\Components\TextInput::make('amount')
                     ->required()
+                    ->prefix(label: 'IDR')
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters('.')
                     ->numeric(),
                 Forms\Components\Textarea::make('note')
                     ->required()
@@ -45,6 +52,7 @@ class TransactionsResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('bill')
                     ->image()
+                    ->columnSpanFull()
             ]);
     }
 
@@ -70,7 +78,7 @@ class TransactionsResource extends Resource
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->getStateUsing(fn (Transactions $model): string => numberToIdr($model->amount))
+                    ->getStateUsing(fn(Transactions $model): string => numberToIdr($model->amount))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

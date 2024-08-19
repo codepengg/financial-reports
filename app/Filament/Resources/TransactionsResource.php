@@ -3,16 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TransactionsResource\Pages;
-use App\Filament\Resources\TransactionsResource\RelationManagers;
 use App\Models\Transactions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TransactionsResource extends Resource
 {
@@ -42,11 +38,8 @@ class TransactionsResource extends Resource
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->prefix(label: 'IDR')
-                    ->mask(RawJs::make('$money($input)'))
-                    ->stripCharacters('.')
                     ->numeric(),
                 Forms\Components\Textarea::make('note')
-                    ->required()
                     ->rows(5)
                     ->maxLength(65535)
                     ->columnSpanFull(),

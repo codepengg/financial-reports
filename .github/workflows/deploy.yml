@@ -1,50 +1,39 @@
-name: Deploy to FTP
-
+name: Deploy to VPS
 
 on:
   push:
     branches:
       - main
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          php-version: '8.3'
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-
-      - name: Install Composer Dependencies
-        run: composer install --no-dev
-
-
-      - name: Deploy to FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_PATH }}
-          local-dir: ./
-
-      - name: Directory Permission
+      - name: Copy files to VPS
         run: |
-          sudo chown -R www-data:www-data .
-          sudo chmod -R 755 .
-          sudo chmod -R 777 storage boostrap/cache
+          rsync -avz --delete \
+          -e 'ssh -o StrictHostKeyChecking=no' \
+          ./ root@123.12.12.765:/home/pengg/financial-report.pengg.web.id/
 
-      - name: Clear Cached Files
+      - name: Install Composer dependencies
         run: |
-          php artisan optimize:clear
-          php artisan storage:link
+          ssh -o StrictHostKeyChecking=no root@123.12.12.765 '
+          cd /home/pengg/financial-report.pengg.web.id &&
+          if [ ! -d "vendor" ]; then
+            composer install;
+          fi'
 
-
+      - name: Set Permissions
+        run: |
+          ssh -o StrictHostKeyChecking=no root@123.12.12.765 '
+          chown -R www-data:www-data /home/pengg/financial-report.pengg.web.id &&
+          chmod -R 775 /home/pengg/financial-report.pengg.web.id'

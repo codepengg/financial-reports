@@ -19,6 +19,10 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-s-list-bullet';
 
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationGroup = 'Master Data';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -29,7 +33,7 @@ class CategoryResource extends Resource
                 Forms\Components\Toggle::make('is_expenses')
                     ->label('Is Expenses')
                     ->required(),
-                Forms\Components\FileUpload::make('image')
+                Forms\Components\FileUpload::make('icon')
                     ->image()
                     ->required(),
             ]);

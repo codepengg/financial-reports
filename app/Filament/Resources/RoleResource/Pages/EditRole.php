@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Filament\Resources\CategoryResource\Pages;
+namespace App\Filament\Resources\RoleResource\Pages;
 
-use App\Filament\Resources\CategoryResource;
+use App\Filament\Resources\RoleResource;
+use App\Models\Permission;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
 
-class EditCategory extends EditRecord
+class EditRole extends EditRecord
 {
-    protected static string $resource = CategoryResource::class;
+    protected static string $resource = RoleResource::class;
 
     protected function getRedirectUrl(): string
     {
@@ -21,4 +23,5 @@ class EditCategory extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
 }

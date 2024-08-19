@@ -17,7 +17,11 @@ class TransactionsResource extends Resource
 {
     protected static ?string $model = Transactions::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-currency-dollar';
+
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationGroup = 'Transactions';
 
     public static function form(Form $form): Form
     {
@@ -36,11 +40,11 @@ class TransactionsResource extends Resource
                     ->numeric(),
                 Forms\Components\Textarea::make('note')
                     ->required()
+                    ->rows(5)
                     ->maxLength(65535)
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('image')
+                Forms\Components\FileUpload::make('bill')
                     ->image()
-                    ->required(),
             ]);
     }
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\CategoryResource\Pages;
+namespace App\Filament\Resources\PermissionResource\Pages;
 
-use App\Filament\Resources\CategoryResource;
+use App\Filament\Resources\PermissionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditCategory extends EditRecord
+class EditPermission extends EditRecord
 {
-    protected static string $resource = CategoryResource::class;
+    protected static string $resource = PermissionResource::class;
 
     protected function getRedirectUrl(): string
     {
@@ -19,6 +19,8 @@ class EditCategory extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+            Actions\ForceDeleteAction::make(),
+            Actions\RestoreAction::make(),
         ];
     }
 }

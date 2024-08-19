@@ -13,4 +13,8 @@ class Category extends Model
     protected $fillable = [
         'name', 'is_expenses', 'image'
     ];
+
+    protected $casts = [
+        'is_expenses' => 'boolean'
+    ];
 }

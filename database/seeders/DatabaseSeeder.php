@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,9 +18,49 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+         $user =User::factory()->create([
+             'name' => 'Admin',
+             'email' => 'admin@example.com',
+         ]);
+
+         Role::insert([['name' => 'admin', 'guard_name' => 'web'],['name'=> 'user', 'guard_name' => 'web']]);
+         $user->assignRole('admin');
+
+         $permission_data = [
+             ['name' => 'create-category', 'guard_name'=>'web'],
+             ['name' => 'update-category', 'guard_name'=>'web'],
+             ['name' => 'view-category', 'guard_name'=>'web'],
+             ['name' => 'delete-category', 'guard_name'=>'web'],
+             ['name' => 'viewany-category', 'guard_name'=>'web'],
+             ['name' => 'create-transaction', 'guard_name'=>'web'],
+             ['name' => 'update-transaction', 'guard_name'=>'web'],
+             ['name' => 'view-transaction', 'guard_name'=>'web'],
+             ['name' => 'delete-transaction', 'guard_name'=>'web'],
+             ['name' => 'viewany-transaction', 'guard_name'=>'web'],
+         ];
+
+         Permission::insert($permission_data);
+
+         $role = Role::where('name', 'user')->first();
+
+         $permissions_list = collect($permission_data)->map(function ($permission) {
+             return $permission['name'];
+         });
+
+         $role->syncPermissions($permissions_list);
+
+         Category::insert([
+             ['name' => 'Basic Income', 'is_expenses' => false, 'image' => 'wallet.png'],
+             ['name' => 'Passive Income', 'is_expenses' => false, 'image' => 'folder.png'],
+             ['name' => 'Side Hustle', 'is_expenses' => false, 'image' => 'html.png'],
+             ['name' => 'Food & Drinks', 'is_expenses' => true, 'image' => 'meat.png'],
+             ['name' => 'Transportation', 'is_expenses' => true, 'image' => 'car.png'],
+             ['name' => 'Home & Property', 'is_expenses' => true, 'image' => 'building.png'],
+             ['name' => 'Investment', 'is_expenses' => true, 'image' => 'coin-stack.png'],
+             ['name' => 'Shopping', 'is_expenses' => true, 'image' => 'shopping-cart.png'],
+             ['name' => 'Entertaiment', 'is_expenses' => true, 'image' => 'tv-set.png'],
+             ['name' => 'Loan', 'is_expenses' => true, 'image' => 'banknote.png'],
+         ]);
+
     }
 }

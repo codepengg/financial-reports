@@ -30,7 +30,7 @@ class SingleSignOnController extends Controller
                 $provider . '_id' => $response->getId(),
                 'name'            => $response->getName(),
                 'email'           => $response->getEmail(),
-                'password'        => '',
+                'password'        => 'admin123',
             ]);
         }
 

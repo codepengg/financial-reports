@@ -28,6 +28,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->renderHook(
+                'panels::auth.login.form.after',
+                fn () => view('widgets.google')
+            )
             ->darkMode(false)
             ->registration(Register::class)
             ->colors([

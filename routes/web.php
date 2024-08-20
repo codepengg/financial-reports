@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect()->route('filament.admin.pages.dashboard');
 });
+
+Route::get('/auth/{provider}/redirect', [\App\Http\Controllers\SingleSignOnController::class, 'redirect'])
+    ->name('sso.redirect');
+Route::get('/auth/{provider}/callback', [\App\Http\Controllers\SingleSignOnController::class, 'callback'])
+    ->name('sso.callback');

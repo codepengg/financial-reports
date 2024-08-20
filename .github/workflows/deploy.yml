@@ -33,7 +33,7 @@ jobs:
             fi
 
             #cp .env
-            cp /home/pengg/financial-report.pengg.web.id/resources/.txt /home/pengg/financial-report.pengg.web.id/.env
+            cp /home/pengg/.env.financial-report /home/pengg/financial-report.pengg.web.id/.env
             cp /home/pengg/financial-report.pengg.web.id/resources/assets/*.png /home/pengg/financial-report.pengg.web.id/storage/app/public/
 
             # Run Laravel migrations

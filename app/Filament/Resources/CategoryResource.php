@@ -22,6 +22,11 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationGroup = 'Master Data';
 
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('createcategory');
+    }
+
     public static function form(Form $form): Form
     {
         return $form

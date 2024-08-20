@@ -35,7 +35,7 @@ class TransactionsResource extends Resource
                 Forms\Components\DatePicker::make('date_transaction')
                     ->label('Date Transaction')
                     ->default(now()->timezone('Asia/Jakarta'))
-                    ->format('d-m-y')
+                    ->format('Y-m-d')
                     ->required(),
                 Forms\Components\TextInput::make('amount')
                     ->required()

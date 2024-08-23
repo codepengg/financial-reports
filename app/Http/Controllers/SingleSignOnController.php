@@ -3,11 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Http\Request;
+
+use Filament\Pages\Auth\Register;
 
 class SingleSignOnController extends Controller
 {
+
+    protected $register;
+
+    public function __construct(Register $register)
+    {
+        return $this->register = $register;
+    }
+
     public function redirect(string $provider)
     {
         $this->validateProvider($provider);
@@ -25,18 +35,19 @@ class SingleSignOnController extends Controller
 
         if ($user) {
             $user->update([$provider . '_id' => $response->getId()]);
+            auth()->login($user);
+            return redirect()->intended(route('filament.admin.pages.dashboard'));
         } else {
-            $user = User::create([
+
+            $this->register->form->fill([
                 $provider . '_id' => $response->getId(),
-                'name'            => $response->getName(),
-                'email'           => $response->getEmail(),
-                'password'        => 'admin123',
+                'name' => $response->getName(),
+                'email' => $response->getEmail(),
+                'password' => 'admin123',
             ]);
+
+            return $this->register->register();
         }
-
-        auth()->login($user);
-
-        return redirect()->intended(route('filament.admin.pages.dashboard'));
     }
 
     protected function validateProvider(string $provider): array

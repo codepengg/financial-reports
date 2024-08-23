@@ -8,9 +8,10 @@ use Filament\Events\Auth\Registered;
 use Filament\Facades\Filament;
 use Filament\Http\Responses\Auth\Contracts\RegistrationResponse;
 use Filament\Notifications\Notification;
-use \Filament\Pages\Auth\Register as BaseRegister;
+use Filament\Pages\Auth\Register as BaseRegister;
 class Register extends BaseRegister
 {
+    protected $register;
     public function register(): ?RegistrationResponse
     {
         try {
@@ -40,6 +41,8 @@ class Register extends BaseRegister
         $user->assignCategoriesToUser($category);
 
         event(new Registered($user));
+
+        $this->sendEmailVerificationNotification($user);
 
         Filament::auth()->login($user);
 

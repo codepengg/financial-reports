@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->emailVerification()
             ->renderHook(
                 'panels::auth.login.form.after',
                 fn () => view('widgets.google')

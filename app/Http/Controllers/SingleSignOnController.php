@@ -12,7 +12,7 @@ use Filament\Pages\Auth\Register;
 class SingleSignOnController extends Controller
 {
 
-    protected $register;
+    protected Register $register;
 
     public function __construct(Register $register)
     {

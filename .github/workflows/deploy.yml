@@ -39,6 +39,10 @@ jobs:
             # Run Laravel migrations
             php artisan migrate --force
             php artisan storage:link
+            php artisan optimize:clear
+            php artisan route:clear
+            php artisan cache:clear
+
 
             # Set proper permissions
             chown -R www-data:www-data /home/pengg/financial-report.pengg.web.id

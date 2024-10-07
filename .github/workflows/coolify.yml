@@ -21,7 +21,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/your-repo-name:${{ github.sha }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/financial-report:${{ github.sha }}
 
     - name: Generate SHA256 for Coolify webhook
       id: generate_sha
